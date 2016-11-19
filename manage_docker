@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Remove exited Docker container ..."
+docker rm $(docker ps --no-trunc -aq -f status=exited)
+
+echo "Remove Docker images with status 'dengling'"
+docker rmi $(docker images -q -f "dangling=true")
+
+
+
