@@ -1,4 +1,4 @@
-FROM dhessenm/rpi-nodejs
+FROM dhessenm/armhf-nodejs
 MAINTAINER Dirk Hessenmüller
 
 ENV NODE_ENV production
