@@ -11,17 +11,17 @@ MAINTAINER Dirk Hessenmüller
 # RUN \
 #   apt-get update && \
 #   apt-get install -y curl && \
-#   curl http://nodejs.org/dist/latest-v4.x/node-v4.6.1-linux-armv7l.tar.gz && \
-#   tar -xf node-v4.6.1-linux-armv7l.tar.gz && \
-#   cd node-v4.6.1-linux-armv7l && \
+#   curl http://nodejs.org/dist/latest-v4.x/node-v4.8.2-linux-armv7l.tar.gz && \
+#   tar -xf node-v4.8.2-linux-armv7l.tar.gz && \
+#   cd node-v4.8.2-linux-armv7l && \
 #   cp -R * /usr/local/
 
 
 
-ADD node-v4.6.1-linux-armv7l.tar /tmp/
+ADD node-v4.8.2-linux-armv7l.tar /tmp/
 
 RUN \
-  cd /tmp/node-v4.6.1-linux-armv7l && \
+  cd /tmp/node-v4.8.2-linux-armv7l && \
   cp -R * /usr/local/ && \
   cd /tmp && \
   rm -rf /tmp/node*
