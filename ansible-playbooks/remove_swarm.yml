@@ -1,0 +1,13 @@
+---
+
+- hosts: cluster
+  become: True
+
+  tasks:
+    - name: Leave swarm cluster
+      shell: docker swarm leave --force
+
+
+
+
+
