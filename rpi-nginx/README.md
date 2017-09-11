@@ -1,10 +1,22 @@
 Base Docker Image to run Nginx server on Raspberry Pi.
 
+## Build the image
+
+```
+docker build -t dhessenm/armhf-nginx .
+```
+
 ## Getting the image
 
 The image is available from the Docker registry:
 ```
 docker pull sequenceiq/rpi-nginx
+```
+
+Create letsencrypt tar file: 
+
+```
+tar cvf /tmp/letsencrypt.tar /etc/letsencrypt
 ```
 
 ## Using the image
