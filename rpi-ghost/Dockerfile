@@ -1,33 +1,45 @@
 FROM dhessenm/armhf-nodejs
 MAINTAINER Dirk Hessenmüller
 
-ENV NODE_ENV production
+ENV NPM_CONFIG_LOGLEVEL warn
 
 USER root
-WORKDIR /var/www/
+WORKDIR /root/
 
-RUN mkdir -p ghost
-RUN apt-get update && apt-get -qy install wget curl unzip python build-essential && \
-    wget https://ghost.org/zip/ghost-latest.zip && \
-    unzip ghost-*.zip -d ghost && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y mysql-client
 
-RUN useradd ghost -m -G www-data -s /bin/bash && \
-    chown ghost:www-data . && \
-    chown ghost:www-data ghost && \
-    chown ghost:www-data -R ghost/* 
+RUN npm install -g ghost-cli 
+RUN useradd -g www-data -s /bin/bash -c "ghost user" -d /home/ghost -m ghost 
+RUN mkdir -p /var/www/ghost && chown -R ghost /var/www/ghost && chgrp -R www-data /var/www/ghost
 
-RUN npm install -g pm2
+# RUN addgroup www-data
+# RUN adduser --ingroup www-data --shell /bin/bash ghost
+# RUN chown ghost:www-data .
 
 USER ghost
 WORKDIR /var/www/ghost
-RUN /bin/bash -c "time (npm install sqlite3 --build-from-source)"
-RUN npm install
-# RUN sed -e s/127.0.0.1/0.0.0.0/g ./config.example.js > ./config.js
-ADD config.js /var/www/ghost/
+
+# first run ghost config mysql ...
+# RUN ghost install --url=https://anfang.hopto.org/ghost --db=mysql --dbhost=db --dbuser=root --dbpass=12345678 --dbname=ghost --no-prompt --no-start
+
+RUN ghost install local --no-start --url=https://anfang.hopto.org/blog --db=mysql --dbhost=192.168.1.21 --dbuser=root --dbpass=12345678 --dbname=ghost --no-prompt 
+
+ADD create_db_user.sql /home/ghost/create_db_user.sql
+ADD ghost.sql /home/ghost/ghost.sql
+ADD run.sh /home/ghost/run.sh
+ADD config.development.json /var/www/ghost/config.development.json
+
+USER root
+WORKDIR /root/
+RUN chown ghost /home/ghost/* && \ 
+    chmod 744 /home/ghost/*.sh && \ 
+    chown ghost /var/www/ghost/config.development.json
 
 EXPOSE 2368
 EXPOSE 2369
 
-CMD ["pm2", "start", "index.js", "--name", "blog", "--no-daemon"]
+# ENV NODE_ENV production
+# RUN sed -ie s/127.0.0.1/0.0.0.0/g config.development.json
+
+CMD ["ghost", "run", "--development", "--ip", "0.0.0.0"]
 

@@ -6,8 +6,5 @@
   tasks:
     - name: Leave swarm cluster
       shell: docker swarm leave --force
-
-
-
-
+      ignore_errors: True
 

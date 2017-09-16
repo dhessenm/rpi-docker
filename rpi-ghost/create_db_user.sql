@@ -1,0 +1,5 @@
+CREATE DATABASE ghost;
+CREATE USER 'ghost'@'%' IDENTIFIED BY 'ghost';
+GRANT ALL PRIVILEGES ON ghost.* TO 'ghost'@'%';
+FLUSH PRIVILEGES;
+
