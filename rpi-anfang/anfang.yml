@@ -1,0 +1,55 @@
+version: '3.3'
+
+services:
+  nx:
+    image: dhessenm/rpi-anfang-nginx:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.htype==front
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/etc/letsencrypt:/etc/letsencrypt:ro"
+      - "/home/pi/dev/rpi-docker/rpi-anfang/www/anfang.hopto.org:/var/www/anfang.hopto.org:rw"
+    depends_on:
+      - fpm
+    networks:
+      - fpm
+
+  fpm:
+    image: dhessenm/rpi-anfang-fpm:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.htype==front
+    volumes:
+      - "/home/pi/dev/rpi-docker/rpi-anfang/www/anfang.hopto.org:/var/www/anfang.hopto.org:rw"
+    depends_on:
+      - db
+    networks:
+      - fpm
+      - db
+
+  db:
+    image: dhessenm/rpi-anfang-mysql:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.labels.pv == gluster]
+    volumes:
+      - "/swarm/volumes/anfang/db/var/lib/mysql:/var/lib/mysql:rw"
+      - "/swarm/volumes/anfang/db/run/mysqld:/run/mysqld:rw"
+    networks:
+      - db
+
+networks:
+  fpm:
+  db:
+
+

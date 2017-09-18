@@ -1,0 +1,18 @@
+FROM resin/rpi-raspbian:stretch
+
+MAINTAINER Dirk Hessenmueller  <dirk.hessenmueller@anfang.hopto.org>
+
+
+RUN apt-get update && \
+    apt-get install -y php-mysql php-fpm libjpeg-dev libpng-dev php-mysql  pwgen vim\
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's/^listen = .*/listen = 9000/g' /etc/php/7.0/fpm/pool.d/www.conf && \
+    mkdir /run/php
+
+
+EXPOSE 9000
+
+# CMD php-fpm7.0 --force-stderr --nodaemonize --fpm-config /etc/php/7.0/fpm/php-fpm.conf
+CMD php-fpm7.0 --force-stderr --nodaemonize --fpm-config /etc/php/7.0/fpm/php-fpm.conf
+

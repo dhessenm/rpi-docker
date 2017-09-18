@@ -29,5 +29,14 @@ ENV PHP_POST_MAX_SIZE 10M
 # Add volumes for MySQL 
 # VOLUME  ["/etc/mysql", "/var/lib/mysql" ]
 
+ENV WORDPRESS_VERSION 4.8.1
+RUN set -ex; \
+    curl -o wordpress.tar.gz -fSL "https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz"; \
+    tar -xzf wordpress.tar.gz -C /var/www/html; \
+    rm wordpress.tar.gz; \
+    mv /var/www/html/wordpress /var/www/html/blog; \
+    chown -R www-data:www-data /var/www/html/blog
+
+
 EXPOSE 80 443
 CMD ["/run.sh"]

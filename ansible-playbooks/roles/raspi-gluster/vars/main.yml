@@ -1,0 +1,7 @@
+---
+# vars file for raspi-gluster
+
+gluster_dirs:
+  - /gluster/data
+  - /swarm/volumes
+

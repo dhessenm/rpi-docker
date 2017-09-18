@@ -1,0 +1,11 @@
+- hosts: raspi4, raspi5
+  become: Yes
+  gather_facts: yes
+
+  pre_tasks:
+     - name: Apt update
+       apt: update_cache=yes
+
+  roles:
+     - { role: raspi-gluster }
+

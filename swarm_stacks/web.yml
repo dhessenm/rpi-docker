@@ -19,7 +19,7 @@ services:
       - wp
 
   wp:
-    image: dhessenm/armhf-apache2:latest
+    image: dhessenm/armhf-fpm:latest
     deploy:
       replicas: 1
       placement:
@@ -27,6 +27,7 @@ services:
           - node.labels.htype==front
     networks:
       - wp
+      - db
 
   db:
     image: dhessenm/armhf-mysql:latest

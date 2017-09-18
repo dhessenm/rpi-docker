@@ -1,0 +1,41 @@
+---
+# tasks file for raspi-gluster
+
+- name: Install glusterfs
+  apt: name=glusterfs-server state=present
+
+- name: Install xfs progs
+  apt: name=xfsprogs state=present
+
+- name: Directories are present
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items: "{{ gluster_dirs }}"
+
+- name: Create xfs filesystem on gluster device (default sdb1)
+  filesystem:
+    fstype: xfs
+    dev: "/dev/{{ gluster_device }}"
+    force: yes
+  ignore_errors: True
+
+- name: Mount gluster device (default sdb1)
+  mount:
+    path: /gluster/data
+    src: "/dev/{{ gluster_device }}"
+    fstype: xfs
+    state: mounted
+
+# - name: Create Gluster Volume swarm-volume
+#   gluster_volume:
+#      state: present
+#      name: swarm-vols
+#      force: yes
+#      cluster:
+#        - raspi4-int
+#        - raspi5-int
+#   run_once: true
+
+    
