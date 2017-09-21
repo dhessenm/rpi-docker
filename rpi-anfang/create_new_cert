@@ -1,0 +1,10 @@
+#!/bin/bash
+WEBROOT="/home/pi/dev/rpi-docker/rpi-anfang/www/anfang.hopto.org"
+DOMAIN="anfang.hopto.org"
+
+sudo certbot certonly -n --webroot -w ${WEBROOT}  -d ${DOMAIN}
+
+docker service update --force --update-delay 5s anfang_nx
+
+
+

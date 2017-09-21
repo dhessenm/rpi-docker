@@ -1,6 +1,6 @@
 FROM resin/rpi-raspbian:stretch
 
-RUN apt-get update && apt-get install -y nginx vim supervisor && \
+RUN apt-get update && apt-get install -y nginx vim supervisor certbot && \
    rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/nginx/sites-enabled/default && \
